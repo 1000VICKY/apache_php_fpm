@@ -1,0 +1,35 @@
+version: "3"
+
+
+services : 
+    # webサーバーの定義
+    mt-web-server:
+        image: httpd
+        ports: 
+          - "22280:80"
+        volumes:
+            - "./app-source:/usr/local/apache2/htdocs/"
+            - "./sites-enabled/httpd.conf:/usr/local/apache2/conf/httpd.conf"
+        container_name: mt-web-server
+        environment:
+            TZ: Asia/Tokyo
+        links:
+            - mt-app-server:mt-app-server
+        networks:
+            - mt_network
+        # アプリケーションサーバーの定義
+    mt-app-server:
+        build: "./app-docker-file"
+        ports:
+            - "9000:9000"
+        volumes:
+            - "./app-ini:/usr/local/etc/php"
+            - "./app-source:/var/www/html/application"
+        container_name: mt-app-server
+        environment:
+            TZ: Asia/Tokyo
+        networks:
+            - mt_network
+networks:
+    mt_network:
+        external: true
