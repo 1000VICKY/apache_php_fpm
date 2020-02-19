@@ -2,9 +2,9 @@ FROM php:7.3.14-fpm
 
 
 RUN apt-get update
-RUN apt-get install -y libpq-dev libjpeg-dev libpng-dev vim nodejs libzip-dev unzip ca-certificates git
+RUN apt-get install -y libpq-dev libjpeg-dev libpng-dev vim nodejs libzip-dev unzip ca-certificates git libbz2-dev
 RUN docker-php-ext-configure gd --with-jpeg-dir=/usr/include --with-png-dir=/usr/include
-RUN docker-php-ext-install gd opcache pdo_pgsql pdo_mysql zip
+RUN docker-php-ext-install zip gd opcache pdo_pgsql pdo_mysql bz2
 
 RUN git config --global http.sslVerify false
 # Composerのインストール
@@ -12,8 +12,10 @@ RUN git config --global http.sslVerify false
 COPY --from=composer /usr/bin/composer /usr/bin/composer
 
 # zend opcacheを有効にしたphp.iniファイルをコピーする
-COPY ./php.ini /usr/local/etc/php/php.ini
-WORKDIR /var/www/html/en
+COPY php.ini /usr/local/etc/php/php.ini
+WORKDIR /var/www/html/application
+# RUN touch composer.json
+# RUN composer install
 #RUN cd /var/www/html/en && composer install
 
 # ENTRYPOINT ["docker-php-entrypoint"]
