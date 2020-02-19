@@ -1,11 +1,11 @@
 version: "3"
 
 
-services : 
+services :
     # webサーバーの定義
     mt-web-server:
         image: httpd
-        ports: 
+        ports:
           - "22280:80"
         volumes:
             - "./app-source:/usr/local/apache2/htdocs/"
@@ -17,11 +17,12 @@ services :
             - mt-app-server:mt-app-server
         networks:
             - mt_network
-        # アプリケーションサーバーの定義
+
+    # アプリケーションサーバーの定義
     mt-app-server:
         build: "./app-docker-file"
         ports:
-            - "9000:9000"
+            - "19000:9000"
         volumes:
             - "./app-ini:/usr/local/etc/php"
             - "./app-source:/var/www/html/application"
@@ -30,6 +31,26 @@ services :
             TZ: Asia/Tokyo
         networks:
             - mt_network
+
+    # DBサーバーの定義
+    mt-db-server:
+        image: mariadb
+        restart: always
+        volumes:
+            - "maria_db:/var/lib/mysql"
+            - "./mysql-cnf:/etc/mysql/conf.d"
+        ports:
+            - "13306:3306"
+        environment:
+            - MYSQL_DATABASE=mt
+            - MYSQL_USER=mt
+            - MYSQL_PASSWOR=mt
+            - MYSQL_ROOT_PASSWORD=mt
+
 networks:
     mt_network:
+        external: true
+
+volumes:
+    maria_db:
         external: true
