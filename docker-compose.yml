@@ -8,7 +8,7 @@ services :
         ports:
           - "22280:80"
         volumes:
-            - "./app-source:/usr/local/apache2/htdocs/"
+            - "./app-source/system/public:/usr/local/apache2/htdocs/"
             - "./sites-enabled/httpd.conf:/usr/local/apache2/conf/httpd.conf"
         container_name: mt-web-server
         environment:
@@ -25,7 +25,7 @@ services :
             - "19000:9000"
         volumes:
             - "./app-ini:/usr/local/etc/php"
-            - "./app-source:/var/www/html/application"
+            - "./app-source:/var/www/html/app-source"
         container_name: mt-app-server
         environment:
             TZ: Asia/Tokyo
