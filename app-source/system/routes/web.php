@@ -13,3 +13,9 @@
 
 // アプリケーショントップ
 Route::get("/", "TopController@index");
+
+
+
+Route::post("/estimate/postCreate", "EstimateController@postCreate");
+Route::get("/estimate/create", "EstimateController@create");
+Route::get("/estimate/{estimateNumber}/{estimateCode}", "EstimateController@index");

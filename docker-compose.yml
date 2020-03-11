@@ -10,7 +10,6 @@ services :
         volumes:
             - "./app-source/system/public:/usr/local/apache2/htdocs/"
             - "./sites-enabled/httpd.conf:/usr/local/apache2/conf/httpd.conf"
-        container_name: mt-web-server
         environment:
             TZ: Asia/Tokyo
         links:
@@ -26,7 +25,6 @@ services :
         volumes:
             - "./app-ini:/usr/local/etc/php"
             - "./app-source:/var/www/html/app-source"
-        container_name: mt-app-server
         environment:
             TZ: Asia/Tokyo
         networks:
@@ -44,8 +42,10 @@ services :
         environment:
             - MYSQL_DATABASE=mt
             - MYSQL_USER=mt
-            - MYSQL_PASSWOR=mt
+            - MYSQL_PASSWORD=mt
             - MYSQL_ROOT_PASSWORD=mt
+        networks:
+            - mt_network            
 
 networks:
     mt_network:
